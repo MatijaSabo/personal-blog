@@ -8,9 +8,9 @@
 }
 
 .cards > ul > li {
-  border: 2px solid #000000;
-  border-right: 8px solid #000000;
-  border-bottom: 8px solid #000000;
+  border: 2px solid #000;
+  border-right: 8px solid #000;
+  border-bottom: 8px solid #000;
   border-radius: 24px;
   background-color: var(--background-color);
   padding: 16px;  transition: all .25s ease-in-out;
