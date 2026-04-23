@@ -25,8 +25,7 @@
   --orange: #eb5e28;
 
   /* fonts */
-  --font-family: IBMPlexMono, roboto-fallback, sans-serif;
-  --font-family: IBMPlexMono, roboto-condensed-fallback, sans-serif;
+  --font-family: ibmplexmono, roboto-fallback, sans-serif;
 
   /* body sizes */
   --body-font-size-m: 22px;
