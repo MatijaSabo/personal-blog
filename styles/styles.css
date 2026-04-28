@@ -92,6 +92,16 @@ div[data-theme="dark"] {
   padding: 24px;
 }
 
+/* split layout */
+div[data-layout="split"] {
+  display: flex;
+  gap: 16px; /* optional spacing */
+}
+
+div[data-layout="split"] > * {
+  width: 50%;
+}
+
 body.appear {
   display: block;
 }
@@ -125,7 +135,7 @@ h6 {
   margin-top: 0.8em;
   margin-bottom: 0.25em;
   font-family: var(--font-family);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.25;
   scroll-margin: 40px;
 }
