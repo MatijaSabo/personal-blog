@@ -5,6 +5,7 @@ async function createForm(formHref, submitHref) {
   const resp = await fetch(pathname);
   const json = await resp.json();
 
+  console.log('Form JSON:', json);
   const form = document.createElement('form');
   form.dataset.action = submitHref;
 
@@ -78,9 +79,13 @@ async function handleSubmit(form) {
 }
 
 export default async function decorate(block) {
+  console.log('Decorating form block');
   const links = [...block.querySelectorAll('a')].map((a) => a.href);
   const formLink = links.find((link) => link.startsWith(window.location.origin) && link.endsWith('.json'));
   const submitLink = links.find((link) => link !== formLink);
+  console.log('All links:', links);
+  console.log('Form link:', formLink);
+  console.log('Submit link:', submitLink);
   if (!formLink || !submitLink) return;
 
   const form = await createForm(formLink, submitLink);

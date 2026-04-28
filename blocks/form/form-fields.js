@@ -1,5 +1,37 @@
 import { toClassName } from '../../scripts/aem.js';
 
+function toBooleanFlag(value) {
+  const normalized = String(value || '').trim().toLowerCase();
+  return normalized === 'true' || normalized === 'x' || normalized === '1' || normalized === 'yes' || normalized === 'required';
+}
+
+function normalizeFieldDefinition(rawField = {}) {
+  const rawType = rawField.Type ?? rawField.type ?? 'text';
+  const rawFieldset = rawField.Fieldset ?? rawField.fieldset ?? '';
+  const normalized = {
+    Id: rawField.Id ?? rawField.id ?? '',
+    Name: rawField.Name ?? rawField.name ?? rawField.Field ?? rawField.field ?? '',
+    Type: rawType,
+    Label: rawField.Label ?? rawField.label ?? '',
+    Value: rawField.Value ?? rawField.value ?? '',
+    Mandatory: rawField.Mandatory ?? rawField.mandatory ?? rawField.Required ?? rawField.required ?? '',
+    Placeholder: rawField.Placeholder ?? rawField.placeholder ?? '',
+    Options: rawField.Options ?? rawField.options ?? '',
+    Style: rawField.Style ?? rawField.style ?? '',
+    Fieldset: rawFieldset,
+  };
+
+  if (!normalized.Name && String(rawType).toLowerCase() === 'fieldset' && rawFieldset) {
+    normalized.Name = rawFieldset;
+  }
+
+  if (!normalized.Name) {
+    normalized.Name = normalized.Label || normalized.Type;
+  }
+
+  return normalized;
+}
+
 function createFieldWrapper(fd) {
   const fieldWrapper = document.createElement('div');
   if (fd.Style) fieldWrapper.className = fd.Style;
@@ -24,7 +56,7 @@ function createLabel(fd) {
   label.id = generateFieldId(fd, '-label');
   label.textContent = fd.Label || fd.Name;
   label.setAttribute('for', fd.Id);
-  if (fd.Mandatory.toLowerCase() === 'true' || fd.Mandatory.toLowerCase() === 'x') {
+  if (toBooleanFlag(fd.Mandatory)) {
     label.dataset.required = true;
   }
   return label;
@@ -227,10 +259,11 @@ const FIELD_CREATOR_FUNCTIONS = {
 };
 
 export default async function createField(fd, form) {
-  fd.Id = fd.Id || generateFieldId(fd);
-  const type = fd.Type.toLowerCase();
+  const normalizedField = normalizeFieldDefinition(fd);
+  normalizedField.Id = normalizedField.Id || generateFieldId(normalizedField);
+  const type = normalizedField.Type.toLowerCase();
   const createFieldFunc = FIELD_CREATOR_FUNCTIONS[type] || createInput;
-  const fieldElements = await createFieldFunc(fd, form);
+  const fieldElements = await createFieldFunc(normalizedField, form);
 
   return fieldElements.fieldWrapper;
 }
