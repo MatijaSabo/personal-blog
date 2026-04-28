@@ -92,6 +92,16 @@ div[data-theme="dark"] {
   padding: 24px;
 }
 
+/* split layout */
+div[data-layout="split"] {
+  display: flex;
+  gap: 16px; /* optional spacing */
+}
+
+div[data-layout="split"] > * {
+  width: 50%;
+}
+
 body.appear {
   display: block;
 }
